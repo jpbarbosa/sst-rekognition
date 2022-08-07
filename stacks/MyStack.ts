@@ -6,6 +6,7 @@ import {
   Queue,
 } from "@serverless-stack/resources";
 import * as events from "aws-cdk-lib/aws-events";
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 export function MyStack({ stack }: StackContext) {
   const bucket = new Bucket(stack, "bucket", {
@@ -16,9 +17,21 @@ export function MyStack({ stack }: StackContext) {
     },
   });
 
-  const queue = new Queue(stack, "queue", {
-    consumer: "functions/process.handler",
+  const queuePolicy = new PolicyStatement({
+    actions: ["rekognition:*"],
+    resources: ["*"],
   });
+
+  const queue = new Queue(stack, "queue", {
+    consumer: {
+      function: {
+        handler: "functions/process.handler",
+        initialPolicy: [queuePolicy],
+      },
+    },
+  });
+
+  queue.attachPermissions([bucket]);
 
   const bus = new EventBus(stack, "bus", {
     cdk: {
