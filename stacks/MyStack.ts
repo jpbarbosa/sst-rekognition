@@ -4,6 +4,7 @@ import {
   Bucket,
   EventBus,
   Queue,
+  Table,
 } from "@serverless-stack/resources";
 import * as events from "aws-cdk-lib/aws-events";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
@@ -17,6 +18,13 @@ export function MyStack({ stack }: StackContext) {
     },
   });
 
+  const table = new Table(stack, "table", {
+    fields: {
+      id: "string",
+    },
+    primaryIndex: { partitionKey: "id" },
+  });
+
   const queuePolicy = new PolicyStatement({
     actions: ["rekognition:*"],
     resources: ["*"],
@@ -27,11 +35,14 @@ export function MyStack({ stack }: StackContext) {
       function: {
         handler: "functions/process.handler",
         initialPolicy: [queuePolicy],
+        environment: {
+          table: table.tableName,
+        },
       },
     },
   });
 
-  queue.attachPermissions([bucket]);
+  queue.attachPermissions([table, bucket]);
 
   const bus = new EventBus(stack, "bus", {
     cdk: {
@@ -60,10 +71,20 @@ export function MyStack({ stack }: StackContext) {
   });
 
   const api = new Api(stack, "api", {
+    defaults: {
+      function: {
+        environment: {
+          table: table.tableName,
+        },
+      },
+    },
     routes: {
-      "GET /": "functions/lambda.handler",
+      "GET /": "functions/results.handler",
     },
   });
+
+  api.attachPermissions([table]);
+
   stack.addOutputs({
     ApiEndpoint: api.url,
   });
