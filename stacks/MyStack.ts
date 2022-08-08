@@ -5,6 +5,7 @@ import {
   EventBus,
   Queue,
   Table,
+  ViteStaticSite,
 } from "@serverless-stack/resources";
 import * as events from "aws-cdk-lib/aws-events";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
@@ -85,7 +86,15 @@ export function MyStack({ stack }: StackContext) {
 
   api.attachPermissions([table]);
 
+  const site = new ViteStaticSite(stack, "site", {
+    path: "frontend",
+    environment: {
+      VITE_API_URL: api.url,
+    },
+  });
+
   stack.addOutputs({
     ApiEndpoint: api.url,
+    SiteUrl: site.url,
   });
 }
