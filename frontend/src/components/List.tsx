@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Rekognition } from "aws-sdk";
 import moment from "moment";
 import { useFetch } from "../hooks/useFetch";
 import { usePooling } from "../hooks/usePooling";
 import { Labels } from "./Labels";
+import { useAppContext } from "../contexts/AppContext";
 
 export type Item = {
   id: string;
@@ -15,15 +16,11 @@ type Result = {
   Items: Item[];
 };
 
-type ListProps = {
-  uploadId?: string;
-  setUploadId: Function;
-};
-
 const poolingInterval = 3_000;
 
-export const List: React.FC<ListProps> = ({ uploadId, setUploadId }) => {
-  const [selectedItem, setSelectedItem] = useState<Item>();
+export const List: React.FC = () => {
+  const { uploadId, setUploadId, selectedItem, setSelectedItem } =
+    useAppContext();
 
   const { fetchItems, fetching, result } = useFetch<Result>(
     import.meta.env.VITE_API_URL
@@ -90,7 +87,7 @@ export const List: React.FC<ListProps> = ({ uploadId, setUploadId }) => {
           </tbody>
         </table>
       </div>
-      <Labels item={selectedItem} />
+      <Labels />
     </div>
   );
 };

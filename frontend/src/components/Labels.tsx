@@ -1,11 +1,9 @@
 import { Rekognition } from "aws-sdk";
-import { Item } from "./List";
+import { useAppContext } from "../contexts/AppContext";
 
-export type LabelsProps = {
-  item?: Item;
-};
+export const Labels: React.FC = () => {
+  const { selectedItem } = useAppContext();
 
-export const Labels: React.FC<LabelsProps> = ({ item }) => {
   const renderLabel = ({ Name, Confidence, Instances }: Rekognition.Label) => {
     const confidence = Confidence ? Math.round(Confidence) : 0;
     const instances = Instances ? Instances.length : 0;
@@ -27,7 +25,7 @@ export const Labels: React.FC<LabelsProps> = ({ item }) => {
     <div id="labels">
       <h2>Labels</h2>
       <ul className="labels">
-        {item?.labels.Labels?.map((label) => renderLabel(label))}
+        {selectedItem?.labels.Labels?.map((label) => renderLabel(label))}
       </ul>
     </div>
   );

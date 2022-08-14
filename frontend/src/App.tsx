@@ -1,14 +1,14 @@
-import { useState } from "react";
 import { Upload } from "./components/Upload";
 import { List } from "./components/List";
+import { AppContextProvider } from "./contexts/AppContext";
 
 function App() {
-  const [uploadId, setUploadId] = useState();
-
   return (
     <div id="app">
-      <Upload setUploadId={setUploadId} />
-      <List uploadId={uploadId} setUploadId={setUploadId} />
+      <AppContextProvider>
+        <Upload />
+        <List />
+      </AppContextProvider>
     </div>
   );
 }

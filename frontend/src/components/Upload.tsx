@@ -1,6 +1,7 @@
 import React from "react";
 import AWS from "aws-sdk";
 import * as uuid from "uuid";
+import { useAppContext } from "../contexts/AppContext";
 
 const { VITE_API_BUCKET_NAME, VITE_API_IDENTITY_POOL_ID } = import.meta.env;
 
@@ -19,11 +20,9 @@ const s3 = new AWS.S3({
   },
 });
 
-type UploadProps = {
-  setUploadId: Function;
-};
+export const Upload: React.FC = () => {
+  const { setUploadId, setSelectedItem } = useAppContext();
 
-export const Upload: React.FC<UploadProps> = ({ setUploadId }) => {
   const [uploading, setUploading] = React.useState(false);
   const [uploadName, setUploadName] = React.useState<string>();
   const [uploadError, setUploadError] = React.useState<AWS.AWSError>();
@@ -31,6 +30,7 @@ export const Upload: React.FC<UploadProps> = ({ setUploadId }) => {
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const uploadId = uuid.v1();
+      setSelectedItem(undefined);
       setUploading(true);
       setUploadName(undefined);
       setUploadError(undefined);
