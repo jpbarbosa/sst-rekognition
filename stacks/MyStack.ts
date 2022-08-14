@@ -6,12 +6,14 @@ import {
   Queue,
   Table,
   ViteStaticSite,
+  Auth,
 } from "@serverless-stack/resources";
 import * as events from "aws-cdk-lib/aws-events";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 export function MyStack({ stack }: StackContext) {
   const bucket = new Bucket(stack, "bucket", {
+    cors: true,
     cdk: {
       bucket: {
         eventBridgeEnabled: true,
@@ -48,7 +50,7 @@ export function MyStack({ stack }: StackContext) {
   const bus = new EventBus(stack, "bus", {
     cdk: {
       eventBus: events.EventBus.fromEventBusName(
-        this,
+        stack,
         "ImportedBus",
         "default"
       ),
@@ -86,15 +88,33 @@ export function MyStack({ stack }: StackContext) {
 
   api.attachPermissions([table]);
 
+  const auth = new Auth(stack, "auth", {
+    identityPoolFederation: {
+      cdk: {
+        cfnIdentityPool: {
+          identityPoolName: "identityPool",
+          allowUnauthenticatedIdentities: true,
+        },
+      },
+    },
+  });
+
+  const identityPoolId = String(auth.cdk.cfnIdentityPool?.ref);
+
+  auth.attachPermissionsForUnauthUsers(auth, [bucket]);
+
   const site = new ViteStaticSite(stack, "site", {
     path: "frontend",
     environment: {
       VITE_API_URL: api.url,
+      VITE_API_BUCKET_NAME: bucket.bucketName,
+      VITE_API_IDENTITY_POOL_ID: identityPoolId,
     },
   });
 
   stack.addOutputs({
     ApiEndpoint: api.url,
     SiteUrl: site.url,
+    identityPoolId,
   });
 }

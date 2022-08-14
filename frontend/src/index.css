@@ -3,3 +3,7 @@ body {
   margin: 20px;
 }
 
+#app {
+  display: flex;
+  gap: 20px;
+}
