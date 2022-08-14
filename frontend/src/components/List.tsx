@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useFetch } from "../hooks/useFetch";
+import { usePooling } from "../hooks/usePooling";
 
 type Item = {
   id: string;
@@ -18,52 +20,33 @@ type ListProps = {
 const poolingInterval = 3_000;
 
 export const List: React.FC<ListProps> = ({ uploadId, setUploadId }) => {
-  const [fetching, setFetching] = useState(false);
-  const [pooling, setPooling] = useState(false);
-  const [result, setResult] = useState<Result | undefined>();
   const [selectedItem, setSelectedItem] = useState<Item>();
+
+  const { fetchItems, fetching, result } = useFetch<Result>(
+    import.meta.env.VITE_API_URL
+  );
 
   const resultRef = useRef(result);
   resultRef.current = result;
 
-  const fetchItems = async () => {
-    setFetching(true);
-    fetch(import.meta.env.VITE_API_URL)
-      .then((response) => response.json())
-      .then((json) => {
-        setResult(json);
-        setFetching(false);
-      });
+  const findUploadIdInResult = () => {
+    return resultRef.current?.Items.find((item) => item.id === uploadId);
   };
+
+  const { startPooling, pooling } = usePooling({
+    action: fetchItems,
+    stopConditional: findUploadIdInResult,
+    callback: () => setUploadId(undefined),
+    interval: poolingInterval,
+  });
 
   useEffect(() => {
     fetchItems();
   }, []);
 
-  let poolingTimeout: NodeJS.Timeout;
-
-  const controlPooling = async () => {
-    const findResult = resultRef.current?.Items.find(
-      (item) => item.id === uploadId
-    );
-
-    if (findResult) {
-      setPooling(false);
-      setUploadId(undefined);
-      clearTimeout(poolingTimeout);
-      return;
-    }
-
-    setPooling(true);
-    await fetchItems();
-    poolingTimeout = setTimeout(() => {
-      controlPooling();
-    }, poolingInterval);
-  };
-
   useEffect(() => {
     if (uploadId) {
-      controlPooling();
+      startPooling();
     }
   }, [uploadId]);
 
