@@ -10,8 +10,15 @@ export const handler = async (event: APIGatewayProxyHandlerV2) => {
 
   const result = await dynamoDb.scan(params).promise();
 
+  const sortedResult = {
+    ...result,
+    Items: result.Items?.sort((a, b) => {
+      return b.createdAt - a.createdAt;
+    }),
+  };
+
   return {
     statusCode: 200,
-    body: JSON.stringify(result),
+    body: JSON.stringify(sortedResult),
   };
 };

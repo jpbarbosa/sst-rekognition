@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
+import { Rekognition } from "aws-sdk";
+import moment from "moment";
 import { useFetch } from "../hooks/useFetch";
 import { usePooling } from "../hooks/usePooling";
+import { Labels } from "./Labels";
 
-type Item = {
+export type Item = {
   id: string;
   createdAt: string;
-  labels: any;
+  labels: Rekognition.DetectLabelsResponse;
 };
 
 type Result = {
@@ -33,10 +36,15 @@ export const List: React.FC<ListProps> = ({ uploadId, setUploadId }) => {
     return resultRef.current?.Items.find((item) => item.id === uploadId);
   };
 
+  const poolingCallback = () => {
+    setSelectedItem(findUploadIdInResult());
+    setUploadId(undefined);
+  };
+
   const { startPooling, pooling } = usePooling({
     action: fetchItems,
     stopConditional: findUploadIdInResult,
-    callback: () => setUploadId(undefined),
+    callback: poolingCallback,
     interval: poolingInterval,
   });
 
@@ -51,14 +59,14 @@ export const List: React.FC<ListProps> = ({ uploadId, setUploadId }) => {
   }, [uploadId]);
 
   return (
-    <div style={{ display: "flex", gap: "20px" }}>
+    <div id="list">
       <div>
         <h2>List ({result?.Items.length})</h2>
         {pooling && (
           <div>Pooling is active every {poolingInterval / 1000} seconds...</div>
         )}
         {fetching && <div>Loading...</div>}
-        <table border={1} cellPadding={10}>
+        <table className="list" border={1} cellPadding={10}>
           <thead>
             <tr>
               <th>ID</th>
@@ -68,9 +76,12 @@ export const List: React.FC<ListProps> = ({ uploadId, setUploadId }) => {
           </thead>
           <tbody>
             {result?.Items.map((item: any) => (
-              <tr key={item.id}>
+              <tr
+                key={item.id}
+                className={selectedItem?.id === item.id ? "selected" : ""}
+              >
                 <td>{item.id}</td>
-                <td>{item.createdAt}</td>
+                <td>{moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss")}</td>
                 <td>
                   <button onClick={() => setSelectedItem(item)}>Labels</button>
                 </td>
@@ -79,12 +90,7 @@ export const List: React.FC<ListProps> = ({ uploadId, setUploadId }) => {
           </tbody>
         </table>
       </div>
-      <div>
-        <h2>Labels</h2>
-        {selectedItem && (
-          <pre>{JSON.stringify(selectedItem.labels, null, 4)}</pre>
-        )}
-      </div>
+      <Labels item={selectedItem} />
     </div>
   );
 };

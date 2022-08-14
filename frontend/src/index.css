@@ -7,3 +7,38 @@ body {
   display: flex;
   gap: 20px;
 }
+
+div#list {
+  display: flex;
+  gap:20px;
+  width: 100%;
+}
+
+table.list tr.selected {
+  background: yellow;
+}
+
+table.list th,
+table.list td {
+  white-space: nowrap;
+}
+
+div#labels {
+  width: 100%;
+}
+
+ul.labels li {
+    width: 100%;
+    position: relative;
+    margin-bottom: 16px;
+}
+
+ul.labels li div.bar{
+  position: absolute;
+  background: yellow;
+  height: 100%;
+}
+
+ul.labels li div.label{
+  position: absolute;
+}
