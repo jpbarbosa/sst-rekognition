@@ -4,7 +4,6 @@ import {
   SQSHandler,
 } from "aws-lambda";
 import { DynamoDB, Rekognition } from "aws-sdk";
-import * as uuid from "uuid";
 
 const rekognition = new Rekognition();
 
@@ -32,12 +31,15 @@ const getLabels = async ({
   }
 };
 
-const saveLabels = async (labels: Rekognition.Types.DetectLabelsResponse) => {
+const saveLabels = async (
+  key: string,
+  labels: Rekognition.Types.DetectLabelsResponse
+) => {
   try {
     const params = {
       TableName: String(process.env.table),
       Item: {
-        id: uuid.v1(),
+        id: key,
         createdAt: Date.now(),
         labels,
       },
@@ -52,10 +54,13 @@ const saveLabels = async (labels: Rekognition.Types.DetectLabelsResponse) => {
 
 export const handler: SQSHandler = async (sqsEvent) => {
   sqsEvent.Records.forEach(async (record) => {
-    const event: S3ObjectCreatedNotificationEvent = JSON.parse(record.body);
-    const labels = await getLabels(event.detail);
+    const { detail }: S3ObjectCreatedNotificationEvent = JSON.parse(
+      record.body
+    );
+    const labels = await getLabels(detail);
     if (labels) {
-      await saveLabels(labels);
+      const { key } = detail.object;
+      await saveLabels(key, labels);
     }
   });
 };

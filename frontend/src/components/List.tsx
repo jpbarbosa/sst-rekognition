@@ -1,23 +1,80 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-type Result = {
-  Items: [];
+type Item = {
+  id: string;
+  createdAt: string;
+  labels: any;
 };
 
-export const List: React.FC = () => {
-  const [result, setResult] = useState<Result | undefined>();
-  const [selectedItem, setSelectedItem] = useState<any>();
+type Result = {
+  Items: Item[];
+};
 
-  useEffect(() => {
+type ListProps = {
+  uploadId?: string;
+  setUploadId: Function;
+};
+
+const poolingInterval = 3_000;
+
+export const List: React.FC<ListProps> = ({ uploadId, setUploadId }) => {
+  const [fetching, setFetching] = useState(false);
+  const [pooling, setPooling] = useState(false);
+  const [result, setResult] = useState<Result | undefined>();
+  const [selectedItem, setSelectedItem] = useState<Item>();
+
+  const resultRef = useRef(result);
+  resultRef.current = result;
+
+  const fetchItems = async () => {
+    setFetching(true);
     fetch(import.meta.env.VITE_API_URL)
       .then((response) => response.json())
-      .then((json) => setResult(json));
+      .then((json) => {
+        setResult(json);
+        setFetching(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchItems();
   }, []);
+
+  let poolingTimeout: NodeJS.Timeout;
+
+  const controlPooling = async () => {
+    const findResult = resultRef.current?.Items.find(
+      (item) => item.id === uploadId
+    );
+
+    if (findResult) {
+      setPooling(false);
+      setUploadId(undefined);
+      clearTimeout(poolingTimeout);
+      return;
+    }
+
+    setPooling(true);
+    await fetchItems();
+    poolingTimeout = setTimeout(() => {
+      controlPooling();
+    }, poolingInterval);
+  };
+
+  useEffect(() => {
+    if (uploadId) {
+      controlPooling();
+    }
+  }, [uploadId]);
 
   return (
     <div style={{ display: "flex", gap: "20px" }}>
       <div>
         <h2>List ({result?.Items.length})</h2>
+        {pooling && (
+          <div>Pooling is active every {poolingInterval / 1000} seconds...</div>
+        )}
+        {fetching && <div>Loading...</div>}
         <table border={1} cellPadding={10}>
           <thead>
             <tr>

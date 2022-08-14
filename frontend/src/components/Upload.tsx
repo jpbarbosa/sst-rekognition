@@ -1,5 +1,6 @@
 import React from "react";
 import AWS from "aws-sdk";
+import * as uuid from "uuid";
 
 const { VITE_API_BUCKET_NAME, VITE_API_IDENTITY_POOL_ID } = import.meta.env;
 
@@ -18,25 +19,31 @@ const s3 = new AWS.S3({
   },
 });
 
-export const Upload: React.FC = () => {
+type UploadProps = {
+  setUploadId: Function;
+};
+
+export const Upload: React.FC<UploadProps> = ({ setUploadId }) => {
   const [uploading, setUploading] = React.useState(false);
-  const [uploadedFile, setUploadedFile] = React.useState<string>();
+  const [uploadName, setUploadName] = React.useState<string>();
   const [uploadError, setUploadError] = React.useState<AWS.AWSError>();
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
+      const uploadId = uuid.v1();
       setUploading(true);
-      setUploadedFile(undefined);
+      setUploadName(undefined);
       setUploadError(undefined);
       try {
         await s3
-          .putObject({
+          .upload({
             Bucket: VITE_API_BUCKET_NAME,
-            Key: e.target.files[0].name,
+            Key: uploadId,
             Body: e.target.files[0],
           })
           .promise();
-        setUploadedFile(e.target.files[0].name);
+        setUploadId(uploadId);
+        setUploadName(e.target.files[0].name);
       } catch (error) {
         const awsError = error as AWS.AWSError;
         setUploadError(awsError);
@@ -52,7 +59,7 @@ export const Upload: React.FC = () => {
       <form>
         <input type="file" onChange={handleUpload} />
         {uploading && <p>Uploading...</p>}
-        {uploadedFile && <p>{JSON.stringify(uploadedFile)}</p>}
+        {uploadName && <p>{JSON.stringify(uploadName)}</p>}
         {uploadError && <p>{JSON.stringify(uploadError)}</p>}
       </form>
     </div>
