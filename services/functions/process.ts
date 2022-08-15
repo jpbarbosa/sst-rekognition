@@ -3,7 +3,7 @@ import {
   S3ObjectCreatedNotificationEventDetail,
   SQSHandler,
 } from "aws-lambda";
-import { DynamoDB, Rekognition } from "aws-sdk";
+import { AWSError, DynamoDB, Rekognition } from "aws-sdk";
 
 const rekognition = new Rekognition();
 
@@ -13,27 +13,24 @@ const getLabels = async ({
   bucket,
   object,
 }: S3ObjectCreatedNotificationEventDetail) => {
-  try {
-    const labels = await rekognition
-      .detectLabels({
-        Image: {
-          S3Object: {
-            Bucket: bucket.name,
-            Name: object.key,
-          },
+  const labels = await rekognition
+    .detectLabels({
+      Image: {
+        S3Object: {
+          Bucket: bucket.name,
+          Name: object.key,
         },
-      })
-      .promise();
-    console.log("Image has been processed", object.key);
-    return labels;
-  } catch (error) {
-    console.log(error);
-  }
+      },
+    })
+    .promise();
+  console.log("Image has been processed", object.key);
+  return labels;
 };
 
 const saveLabels = async (
   key: string,
-  labels: Rekognition.Types.DetectLabelsResponse
+  labels?: Rekognition.Types.DetectLabelsResponse,
+  error?: AWSError
 ) => {
   try {
     const params = {
@@ -42,6 +39,7 @@ const saveLabels = async (
         id: key,
         createdAt: Date.now(),
         labels,
+        error,
       },
     };
     const result = await dynamoDb.put(params).promise();
@@ -57,10 +55,13 @@ export const handler: SQSHandler = async (sqsEvent) => {
     const { detail }: S3ObjectCreatedNotificationEvent = JSON.parse(
       record.body
     );
-    const labels = await getLabels(detail);
-    if (labels) {
-      const { key } = detail.object;
+    const { key } = detail.object;
+    try {
+      const labels = await getLabels(detail);
       await saveLabels(key, labels);
+    } catch (error) {
+      const awsError = error as AWSError;
+      await saveLabels(key, undefined, awsError);
     }
   });
 };

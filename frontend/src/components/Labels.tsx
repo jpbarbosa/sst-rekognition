@@ -1,8 +1,12 @@
-import { Rekognition } from "aws-sdk";
+import { Rekognition, AWSError } from "aws-sdk";
 import { useAppContext } from "../contexts/AppContext";
 
 export const Labels: React.FC = () => {
   const { selectedItem } = useAppContext();
+
+  const renderError = (error: AWSError) => {
+    return <div>{error.message}</div>;
+  };
 
   const renderLabel = ({ Name, Confidence, Instances }: Rekognition.Label) => {
     const confidence = Confidence ? Math.round(Confidence) : 0;
@@ -24,9 +28,13 @@ export const Labels: React.FC = () => {
   return (
     <div id="labels">
       <h2>Labels</h2>
-      <ul className="labels">
-        {selectedItem?.labels.Labels?.map((label) => renderLabel(label))}
-      </ul>
+      {selectedItem?.error ? (
+        renderError(selectedItem?.error)
+      ) : (
+        <ul className="labels">
+          {selectedItem?.labels?.Labels?.map((label) => renderLabel(label))}
+        </ul>
+      )}
     </div>
   );
 };

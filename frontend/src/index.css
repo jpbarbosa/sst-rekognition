@@ -18,6 +18,14 @@ table.list tr.selected {
   background: yellow;
 }
 
+table.list tr.selected.error {
+  background: lightcoral;
+}
+
+table.list tr.error button {
+  color: red;
+}
+
 table.list th,
 table.list td {
   white-space: nowrap;

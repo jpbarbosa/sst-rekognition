@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { Item } from "../components/List";
+import { Item } from "../../../types/Item";
 
 type AppContextInterface = {
   uploadId?: string;

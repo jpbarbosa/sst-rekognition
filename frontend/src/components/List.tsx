@@ -1,16 +1,10 @@
 import { useEffect, useRef } from "react";
-import { Rekognition } from "aws-sdk";
 import moment from "moment";
+import { Item } from "../../../types/Item";
 import { useFetch } from "../hooks/useFetch";
 import { usePooling } from "../hooks/usePooling";
 import { Labels } from "./Labels";
 import { useAppContext } from "../contexts/AppContext";
-
-export type Item = {
-  id: string;
-  createdAt: string;
-  labels: Rekognition.DetectLabelsResponse;
-};
 
 type Result = {
   Items: Item[];
@@ -55,6 +49,14 @@ export const List: React.FC = () => {
     }
   }, [uploadId]);
 
+  const getItemClassName = (item: Item) => {
+    const classes = [
+      selectedItem?.id === item.id ? "selected" : "",
+      item.error ? "error" : "success",
+    ];
+    return classes.join(" ");
+  };
+
   return (
     <div id="list">
       <div>
@@ -72,15 +74,14 @@ export const List: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {result?.Items.map((item: any) => (
-              <tr
-                key={item.id}
-                className={selectedItem?.id === item.id ? "selected" : ""}
-              >
+            {result?.Items.map((item) => (
+              <tr key={item.id} className={getItemClassName(item)}>
                 <td>{item.id}</td>
                 <td>{moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss")}</td>
                 <td>
-                  <button onClick={() => setSelectedItem(item)}>Labels</button>
+                  <button onClick={() => setSelectedItem(item)}>
+                    {item.error ? "Error" : "Labels"}
+                  </button>
                 </td>
               </tr>
             ))}
