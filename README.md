@@ -17,6 +17,12 @@
 
 ![alt](frontend/public/diagram.svg)
 
+### Screenshot
+
+![alt](frontend/public/screenshot.png)
+
+Image labeled in the above example: https://1x.com/photo/56370
+
 ### References
 
 - https://aws.amazon.com/blogs/aws/new-use-amazon-s3-event-notifications-with-amazon-eventbridge/
