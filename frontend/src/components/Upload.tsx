@@ -54,12 +54,14 @@ export const Upload: React.FC = () => {
   };
 
   return (
-    <div>
+    <div id="upload">
+      <div className="status">
+        {uploading && <div className="uploading">Uploading...</div>}
+      </div>
       <h2>Upload</h2>
       <form>
         <input type="file" onChange={handleUpload} />
-        {uploading && <p>Uploading...</p>}
-        {uploadName && <p>{JSON.stringify(uploadName)}</p>}
+        {uploadName && <p>{uploadName}</p>}
         {uploadError && <p>{JSON.stringify(uploadError)}</p>}
       </form>
     </div>

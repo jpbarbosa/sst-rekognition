@@ -1,29 +1,121 @@
-body {
+* {
   font-family: sans-serif;
-  margin: 20px;
+  box-sizing: border-box;
 }
 
+body {
+  margin: 0;
+  color: #fff;
+  background: #000;
+}
+
+html,
+body,
+#root,
 #app {
+  height: 100%;
+}
+
+header {
+  padding: 16px;
+  border-bottom: 1px solid #fff;
+  background: #333;
+}
+
+header h1 {
+  margin: 0 0 16px 0;
+}
+
+header p {
+  margin: 0;
+}
+
+.content {
   display: flex;
-  gap: 20px;
+}
+
+.status {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.loading,
+.pooling,
+.uploading {
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+h2 {
+  margin: 0 0 16px 0;
+}
+
+div#list,
+div#upload,
+div#labels {
+  position: relative;
+  padding: 16px;
 }
 
 div#list {
-  display: flex;
-  gap:20px;
+  border-left: 1px solid #333;
+  border-right: 1px solid #333;
+}
+
+table.list th,
+table.list td {
+  padding: 8px;
+  color: #ccc;
+}
+
+table.list thead tr {
+  background: #111 !important;
+}
+
+table.list tbody tr {
+  cursor: default;
+}
+
+table.list tr:nth-child(odd) {
+  background: #333;
+}
+
+table.list tr:nth-child(even) {
+  background: #222;
+}
+
+table.list tr.selected td {
+  color: #fff;
+  background: green;
+}
+
+table.list tr button {
   width: 100%;
 }
 
-table.list tr.selected {
-  background: yellow;
+table.list tr.selected button {
+  color: #fff !important;
+  border-color: #fff;
 }
 
-table.list tr.selected.error {
-  background: lightcoral;
+table.list tr.selected.error td {
+  background: red;
+}
+
+table.list tr.success button {
+  color: green;
 }
 
 table.list tr.error button {
   color: red;
+}
+
+table.list td div.id {
+  margin-top: 4px;
+  font-size: x-small;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 table.list th,
@@ -35,18 +127,49 @@ div#labels {
   width: 100%;
 }
 
+ul.labels {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
 ul.labels li {
-    width: 100%;
-    position: relative;
-    margin-bottom: 16px;
+  width: 100%;
+  height: 32px;
+  position: relative;
+  margin-bottom: 2px;
+  background: #111;
+  font-size: small;
 }
 
 ul.labels li div.bar{
   position: absolute;
-  background: yellow;
+  background: #333;
   height: 100%;
 }
 
 ul.labels li div.label{
   position: absolute;
+  line-height: 32px;
+  vertical-align: middle;
+  padding-left: 8px;
+}
+
+ul.labels li div.label .info {
+  padding-left: 4px;
+  color: #999;
+}
+
+input[type='file'],
+button {
+  padding: 4px 16px;
+  color: green;
+  background: transparent;
+  border: 1px solid green;
+  border-radius: 4px;
+}
+
+.error button {
+  color: red;
+  border: 1px solid red;
 }

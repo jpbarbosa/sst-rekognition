@@ -16,10 +16,10 @@ export const Labels: React.FC = () => {
       <li key={Name}>
         <div className="bar" style={{ width: `${confidence}%` }}></div>
         <div className="label">
-          <span>
-            {Name} - {confidence}%
+          <span className="name">{Name}</span>
+          <span className="info">
+            {confidence}%{instances ? ` with ${instances} Instances` : ""}
           </span>
-          <span>{instances ? ` - ${instances} Instances` : ""}</span>
         </div>
       </li>
     );

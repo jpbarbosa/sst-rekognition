@@ -59,36 +59,42 @@ export const List: React.FC = () => {
 
   return (
     <div id="list">
-      <div>
-        <h2>List ({result?.Items.length})</h2>
+      <div className="status">
         {pooling && (
-          <div>Pooling is active every {poolingInterval / 1000} seconds...</div>
+          <div className="pooling">
+            Pooling every {poolingInterval / 1000}s...
+          </div>
         )}
-        {fetching && <div>Loading...</div>}
-        <table className="list" border={1} cellPadding={10}>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Created At</th>
-              <th>Labels</th>
-            </tr>
-          </thead>
-          <tbody>
-            {result?.Items.map((item) => (
-              <tr key={item.id} className={getItemClassName(item)}>
-                <td>{item.id}</td>
-                <td>{moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss")}</td>
-                <td>
-                  <button onClick={() => setSelectedItem(item)}>
-                    {item.error ? "Error" : "Labels"}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {fetching && <div className="loading">Loading...</div>}
       </div>
-      <Labels />
+      <h2>List ({result?.Items.length})</h2>
+      <table className="list">
+        <thead>
+          <tr>
+            <th>Created At / ID</th>
+            <th>Labels</th>
+          </tr>
+        </thead>
+        <tbody>
+          {result?.Items.map((item) => (
+            <tr
+              key={item.id}
+              className={getItemClassName(item)}
+              onClick={() => setSelectedItem(item)}
+            >
+              <td>
+                <div className="date">
+                  {moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+                </div>
+                <div className="id">{item.id}</div>
+              </td>
+              <td>
+                <button>{item.error ? "Error" : "Labels"}</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
