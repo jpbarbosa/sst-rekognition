@@ -1,6 +1,6 @@
 # SST Rekognition
 
-### An event-driven app that uses AWS Rekognition to labeling images
+### An event-driven app to label images on top of AWS
 
 ### Including
 
@@ -12,6 +12,10 @@
 - Simple Queue Service (SQS)
 - Simple Storage Service (S3)
 - Vite Static Site
+
+### Diagram
+
+![alt](frontend/public/diagram.svg)
 
 ### References
 
