@@ -30,7 +30,8 @@ export const List: React.FC = () => {
     setUploadId(undefined);
   };
 
-  const { startPooling, pooling } = usePooling({
+  const { pooling } = usePooling({
+    startTrigger: Boolean(uploadId),
     action: fetchItems,
     stopConditional: findUploadIdInResult,
     callback: poolingCallback,
@@ -40,12 +41,6 @@ export const List: React.FC = () => {
   useEffect(() => {
     fetchItems();
   }, []);
-
-  useEffect(() => {
-    if (uploadId) {
-      startPooling();
-    }
-  }, [uploadId]);
 
   return (
     <div id="list">

@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type UsePoolingParams = {
+  startTrigger: boolean;
   stopConditional: Function;
   action: Function;
   callback: Function;
@@ -8,6 +9,7 @@ type UsePoolingParams = {
 };
 
 export const usePooling = ({
+  startTrigger,
   stopConditional,
   action,
   callback,
@@ -16,6 +18,12 @@ export const usePooling = ({
   const [pooling, setPooling] = useState(false);
 
   let poolingTimeout: NodeJS.Timeout;
+
+  useEffect(() => {
+    if (startTrigger) {
+      startPooling();
+    }
+  }, [startTrigger]);
 
   const startPooling = async () => {
     if (stopConditional()) {
