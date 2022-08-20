@@ -9,7 +9,7 @@ export const Labels: React.FC = () => {
   };
 
   const renderLabel = ({ Name, Confidence, Instances }: Rekognition.Label) => {
-    const confidence = Confidence ? Math.round(Confidence) : 0;
+    const confidence = Confidence ? Math.round(Confidence * 10) / 10 : 0;
     const instances = Instances ? Instances.length : 0;
 
     return (
