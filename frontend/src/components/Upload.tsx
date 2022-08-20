@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import AWS from "aws-sdk";
 import * as uuid from "uuid";
 import { useAppContext } from "../contexts/AppContext";
+import { useUpload } from "../hooks/useUpload";
 
 const { VITE_API_BUCKET_NAME, VITE_API_IDENTITY_POOL_ID } = import.meta.env;
 
@@ -9,57 +10,38 @@ const credentials = new AWS.CognitoIdentityCredentials({
   IdentityPoolId: VITE_API_IDENTITY_POOL_ID,
 });
 
-AWS.config.update({
-  region: "us-east-2",
-  credentials,
-});
-
-const s3 = new AWS.S3({
-  params: {
-    Bucket: VITE_API_BUCKET_NAME,
-  },
-});
-
 export const Upload: React.FC = () => {
   const { uploadId, setUploadId, setSelectedItem } = useAppContext();
 
-  const [uploading, setUploading] = React.useState(false);
-  const [uploadFile, setUploadFile] = React.useState<File>();
-  const [uploadError, setUploadError] = React.useState<AWS.AWSError>();
-
   useEffect(() => {
     if (!uploadId) {
-      setUploadFile(undefined);
-      setUploadError(undefined);
+      resetState();
     }
   }, [uploadId]);
 
+  const { uploading, uploadFile, uploadError, upload, resetState } = useUpload({
+    region: "us-east-2",
+    credentials,
+    bucket: VITE_API_BUCKET_NAME,
+  });
+
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const [file] = e.target.files;
-      const uploadId = uuid.v1();
-      setSelectedItem(undefined);
-      setUploading(true);
-      setUploadId(undefined);
-      setUploadFile(undefined);
-      setUploadError(undefined);
-      try {
-        await s3
-          .upload({
-            Bucket: VITE_API_BUCKET_NAME,
-            Key: uploadId,
-            Body: file,
-          })
-          .promise();
-        setUploadId(uploadId);
-        setUploadFile(file);
-      } catch (error) {
-        const awsError = error as AWS.AWSError;
-        setUploadError(awsError);
-      } finally {
-        setUploading(false);
-      }
+    if (!e.target.files) {
+      return;
     }
+
+    const [file] = e.target.files;
+    const id = uuid.v1();
+    setSelectedItem(undefined);
+    setUploadId(undefined);
+
+    await upload({
+      file,
+      id,
+      callback: () => {
+        setUploadId(id);
+      },
+    });
   };
 
   return (
@@ -83,7 +65,9 @@ export const Upload: React.FC = () => {
         </div>
       )}
       {uploadError && (
-        <div className="box error">{JSON.stringify(uploadError)}</div>
+        <div className="box error">
+          <pre>{JSON.stringify(uploadError, null, 4)}</pre>
+        </div>
       )}
       <div className="box info">
         Only the last uploaded image will be displayed. Files are automatically
