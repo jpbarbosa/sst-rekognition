@@ -12,7 +12,7 @@ type Result = {
 const poolingInterval = 3_000;
 
 export const List: React.FC = () => {
-  const { uploadId, setUploadId, setSelectedItem } = useAppContext();
+  const { uploadId, setSelectedItem } = useAppContext();
 
   const { fetchItems, fetching, result } = useFetch<Result>(
     import.meta.env.VITE_API_URL
@@ -27,7 +27,6 @@ export const List: React.FC = () => {
 
   const poolingCallback = () => {
     setSelectedItem(findUploadIdInResult());
-    setUploadId(undefined);
   };
 
   const { pooling } = usePooling({

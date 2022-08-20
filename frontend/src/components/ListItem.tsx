@@ -7,7 +7,7 @@ type ListItemProps = {
 };
 
 export const ListItem: React.FC<ListItemProps> = ({ item }) => {
-  const { selectedItem, setSelectedItem } = useAppContext();
+  const { selectedItem, setSelectedItem, setUploadId } = useAppContext();
 
   const getItemClassName = (item: Item) => {
     const classes = [
@@ -17,11 +17,16 @@ export const ListItem: React.FC<ListItemProps> = ({ item }) => {
     return classes.join(" ");
   };
 
+  const handleItemClick = (item: Item) => {
+    setSelectedItem(item);
+    setUploadId(undefined);
+  };
+
   return (
     <tr
       key={item.id}
       className={getItemClassName(item)}
-      onClick={() => setSelectedItem(item)}
+      onClick={() => handleItemClick(item)}
     >
       <td>
         <div className="date">

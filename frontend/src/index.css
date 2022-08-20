@@ -1,6 +1,7 @@
 * {
   font-family: sans-serif;
   box-sizing: border-box;
+  line-height: 1.2;
 }
 
 body {
@@ -48,6 +49,30 @@ header p {
   color: #fff;
 }
 
+.box {
+  margin-top: 16px;
+  padding: 8px;
+  border: 2px solid #111;
+}
+
+.box.info {
+  background: #222;
+  border: 2px solid #111;
+  color: #666;
+}
+
+.box.success {
+  background: lightgreen;
+  border-color: darkgreen;
+  color: darkgreen;
+}
+
+.box.error {
+  background: lightcoral;
+  border-color: darkred;
+  color: darkred;
+}
+
 h2 {
   margin: 0 0 16px 0;
 }
@@ -57,6 +82,11 @@ div#upload,
 div#labels {
   position: relative;
   padding: 16px;
+}
+
+div#upload .file img {
+  margin-top: 16px;
+  max-width: 25vw;
 }
 
 div#list {
