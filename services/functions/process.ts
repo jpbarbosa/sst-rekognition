@@ -3,11 +3,13 @@ import {
   S3ObjectCreatedNotificationEventDetail,
   SQSHandler,
 } from "aws-lambda";
-import { AWSError, DynamoDB, Rekognition } from "aws-sdk";
+import { AWSError, DynamoDB, Rekognition, S3 } from "aws-sdk";
 
 const rekognition = new Rekognition();
 
 const dynamoDb = new DynamoDB.DocumentClient();
+
+const s3 = new S3();
 
 const getLabels = async ({
   bucket,
@@ -50,6 +52,23 @@ const saveLabels = async (
   }
 };
 
+const deleteImage = async ({
+  bucket,
+  object,
+}: S3ObjectCreatedNotificationEventDetail) => {
+  try {
+    await s3
+      .deleteObject({
+        Bucket: bucket.name,
+        Key: object.key,
+      })
+      .promise();
+    console.log("Image has been deleted");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const handler: SQSHandler = async (sqsEvent) => {
   sqsEvent.Records.forEach(async (record) => {
     const { detail }: S3ObjectCreatedNotificationEvent = JSON.parse(
@@ -62,6 +81,8 @@ export const handler: SQSHandler = async (sqsEvent) => {
     } catch (error) {
       const awsError = error as AWSError;
       await saveLabels(key, undefined, awsError);
+    } finally {
+      await deleteImage(detail);
     }
   });
 };
