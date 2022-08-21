@@ -93,7 +93,7 @@ div#labels {
 
 div#upload .file img {
   margin-top: 16px;
-  max-width: 25vw;
+  max-width: 100%;
 }
 
 div#list {
