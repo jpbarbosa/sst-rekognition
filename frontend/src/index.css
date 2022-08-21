@@ -82,6 +82,7 @@ div#upload,
 div#labels {
   position: relative;
   padding: 16px;
+  flex: 1;
 }
 
 div#upload .file img {
@@ -94,63 +95,69 @@ div#list {
   border-right: 1px solid #333;
 }
 
-table.list th,
-table.list td {
-  padding: 8px;
-  color: #ccc;
+ul {
+  list-style: none;
+  padding: 0;
 }
 
-table.list thead tr {
+ul.list li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2px;
+  padding: 8px 0 8px 8px;
+  color: #ccc;
+  white-space: nowrap;
+}
+
+ul.list thead tr {
   background: #111 !important;
 }
 
-table.list tbody tr {
+ul.list tbody tr {
   cursor: default;
 }
 
-table.list tr:nth-child(odd) {
+ul.list li:nth-child(odd) {
   background: #333;
 }
 
-table.list tr:nth-child(even) {
+ul.list li:nth-child(even) {
   background: #222;
 }
 
-table.list tr.selected td {
+ul.list li.selected {
   color: #fff;
   background: green;
 }
 
-table.list tr button {
-  width: 100%;
+ul.list li img {
+  width: 32px;
+  height: 32px;
+  filter: invert();
+  opacity: 0.1;
 }
 
-table.list tr.selected button {
+ul.list li.selected button {
   color: #fff !important;
   border-color: #fff;
 }
 
-table.list tr.selected.error td {
+ul.list li.selected.error {
   background: red;
 }
 
-table.list tr.success button {
-  color: green;
+ul.list li.success img {
+  fill: green;
 }
 
-table.list tr.error button {
-  color: red;
+ul.list li.error img {
+  fill: red;
 }
 
-table.list td div.id {
+ul.list li div.id {
   margin-top: 4px;
   font-size: x-small;
   color: rgba(255, 255, 255, 0.5);
-}
-
-table.list th,
-table.list td {
-  white-space: nowrap;
 }
 
 div#labels {
@@ -190,13 +197,14 @@ ul.labels li div.label .info {
   color: #999;
 }
 
-input[type='file'],
-button {
+input::file-selector-button {
   padding: 4px 16px;
-  color: green;
+  color: #0F0;
   background: transparent;
-  border: 1px solid green;
+  border: 1px solid #0F0;
   border-radius: 4px;
+  font-size: large;
+  margin-right: 8px;
 }
 
 .error button {

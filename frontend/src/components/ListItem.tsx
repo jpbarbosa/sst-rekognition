@@ -23,20 +23,18 @@ export const ListItem: React.FC<ListItemProps> = ({ item }) => {
   };
 
   return (
-    <tr
+    <li
       key={item.id}
       className={getItemClassName(item)}
       onClick={() => handleItemClick(item)}
     >
-      <td>
+      <div>
         <div className="date">
           {moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss")}
         </div>
         <div className="id">{item.id}</div>
-      </td>
-      <td>
-        <button>{item.error ? "Error" : "Labels"}</button>
-      </td>
-    </tr>
+      </div>
+      <img src="/arrow.svg" />
+    </li>
   );
 };

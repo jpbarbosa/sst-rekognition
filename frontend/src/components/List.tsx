@@ -51,20 +51,12 @@ export const List: React.FC = () => {
         )}
         {fetching && <div className="loading">Loading...</div>}
       </div>
-      <h2>List ({result?.Items.length})</h2>
-      <table className="list">
-        <thead>
-          <tr>
-            <th>Created At / ID</th>
-            <th>Labels</th>
-          </tr>
-        </thead>
-        <tbody>
-          {result?.Items.map((item) => (
-            <ListItem item={item} />
-          ))}
-        </tbody>
-      </table>
+      <h2>List ({result ? result.Items.length : "..."})</h2>
+      <ul className="list">
+        {result?.Items.map((item) => (
+          <ListItem item={item} />
+        ))}
+      </ul>
     </div>
   );
 };
