@@ -21,7 +21,7 @@
 
 ![alt](frontend/public/screenshot.png)
 
-Image labeled in the above example: https://1x.com/photo/56370
+Image labeled in the above example by Kendisan Seruyan: https://1x.com/photo/56370
 
 ### References
 
