@@ -5,7 +5,7 @@ export const Labels: React.FC = () => {
   const { selectedItem } = useAppContext();
 
   const renderError = (error: AWSError) => {
-    return <div>{error.message}</div>;
+    return <div className="box error">{error.message}</div>;
   };
 
   const renderLabel = ({ Name, Confidence, Instances }: Rekognition.Label) => {

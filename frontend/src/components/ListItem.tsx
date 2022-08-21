@@ -1,6 +1,9 @@
+/// <reference types="vite-plugin-svgr/client" />
+
 import moment from "moment";
 import { Item } from "../../../types/Item";
 import { useAppContext } from "../contexts/AppContext";
+import { ReactComponent as Arrow } from "../assets/arrow.svg";
 
 type ListItemProps = {
   item: Item;
@@ -24,7 +27,6 @@ export const ListItem: React.FC<ListItemProps> = ({ item }) => {
 
   return (
     <li
-      key={item.id}
       className={getItemClassName(item)}
       onClick={() => handleItemClick(item)}
     >
@@ -34,7 +36,7 @@ export const ListItem: React.FC<ListItemProps> = ({ item }) => {
         </div>
         <div className="id">{item.id}</div>
       </div>
-      <img src="/arrow.svg" />
+      <Arrow />
     </li>
   );
 };

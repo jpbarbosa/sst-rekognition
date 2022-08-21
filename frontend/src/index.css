@@ -17,6 +17,11 @@ body,
   height: 100%;
 }
 
+#app {
+  display: flex;
+  flex-direction: column;
+}
+
 header {
   padding: 16px;
   border-bottom: 1px solid #fff;
@@ -33,6 +38,7 @@ header p {
 
 .content {
   display: flex;
+  flex-grow: 1;
 }
 
 .status {
@@ -98,6 +104,7 @@ div#list {
 ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 ul.list li {
@@ -130,27 +137,24 @@ ul.list li.selected {
   background: green;
 }
 
-ul.list li img {
+ul.list li svg {
   width: 32px;
   height: 32px;
-  filter: invert();
-  opacity: 0.1;
 }
 
-ul.list li.selected button {
-  color: #fff !important;
-  border-color: #fff;
+ul.list li.selected svg {
+  fill: #fff !important;
 }
 
 ul.list li.selected.error {
   background: red;
 }
 
-ul.list li.success img {
+ul.list li.success svg {
   fill: green;
 }
 
-ul.list li.error img {
+ul.list li.error svg {
   fill: red;
 }
 

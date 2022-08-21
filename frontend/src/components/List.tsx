@@ -54,7 +54,7 @@ export const List: React.FC = () => {
       <h2>List ({result ? result.Items.length : "..."})</h2>
       <ul className="list">
         {result?.Items.map((item) => (
-          <ListItem item={item} />
+          <ListItem key={item.id} item={item} />
         ))}
       </ul>
     </div>
