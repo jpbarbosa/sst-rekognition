@@ -214,10 +214,16 @@ ul.labels li {
   font-size: small;
 }
 
+ul.labels li:first-child {
+  font-size: large;
+}
+
+ul.labels li:first-child div.bar,
 ul.labels li:hover div.bar {
   background: green;
 }
 
+ul.labels li:first-child div.label.info,
 ul.labels li:hover div.label .info {
   opacity: 1;
 }
