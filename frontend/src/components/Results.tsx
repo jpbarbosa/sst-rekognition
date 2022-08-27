@@ -52,11 +52,13 @@ export const Results: React.FC = () => {
         {fetching && <div className="loading">Loading...</div>}
       </div>
       <h2>Results ({result ? result.Items.length : "..."})</h2>
-      <ul className="results">
-        {result?.Items.map((item) => (
-          <ResultsItem key={item.id} item={item} />
-        ))}
-      </ul>
+      <div className="scrollable">
+        <ul className="results">
+          {result?.Items.map((item) => (
+            <ResultsItem key={item.id} item={item} />
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

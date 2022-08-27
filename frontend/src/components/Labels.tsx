@@ -27,7 +27,7 @@ export const Labels: React.FC = () => {
   return (
     <div id="labels">
       <h2>Labels</h2>
-      {renderLabels()}
+      <div className="scrollable">{renderLabels()}</div>
     </div>
   );
 };

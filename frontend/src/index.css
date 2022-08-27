@@ -103,6 +103,8 @@ h2 {
 div#results,
 div#upload,
 div#labels {
+  display: flex;
+  flex-direction: column;
   position: relative;
   padding: 16px;
   flex: 1;
@@ -116,6 +118,12 @@ div#upload .file img {
 div#results {
   border-left: 1px solid #333;
   border-right: 1px solid #333;
+}
+
+.scrollable {
+  flex: 1 0 0;
+  overflow-y: scroll;
+  min-height: 0;
 }
 
 ul {
