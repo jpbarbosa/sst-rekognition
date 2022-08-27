@@ -5,10 +5,21 @@ import { ReactComponent as Rekognition } from "../../public/rekognition.svg";
 export const Header: React.FC = () => {
   return (
     <header>
-      <Rekognition />
+      <div className="title">
+        <Rekognition />
+        <div>
+          <h1>SST Rekognition</h1>
+          <p>An event-driven app to label images on top of AWS</p>
+        </div>
+      </div>
       <div>
-        <h1>SST Rekognition</h1>
-        <p>An event-driven app to label images on top of AWS</p>
+        <a
+          href="https://github.com/jpbarbosa/sst-rekognition"
+          target="_blank"
+          className="button"
+        >
+          GitHub
+        </a>
       </div>
     </header>
   );

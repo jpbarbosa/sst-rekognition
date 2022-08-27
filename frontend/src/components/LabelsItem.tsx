@@ -11,7 +11,7 @@ export const LabelsItem: React.FC<LabelsItemProps> = ({ label }) => {
   const instances = Instances ? Instances.length : 0;
 
   return (
-    <li key={Name}>
+    <li>
       <div className="bar" style={{ width: `${confidence}%` }}></div>
       <div className="label">
         <span className="name">{Name}</span>

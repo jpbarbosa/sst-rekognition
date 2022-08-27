@@ -18,7 +18,7 @@ export const Labels: React.FC = () => {
     return (
       <ul className="labels">
         {selectedItem.labels?.Labels?.map((label) => (
-          <LabelsItem label={label} />
+          <LabelsItem key={label.Name} label={label} />
         ))}
       </ul>
     );
