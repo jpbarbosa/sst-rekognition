@@ -3,7 +3,7 @@ import { Item } from "../../../types/Item";
 import { useFetch } from "../hooks/useFetch";
 import { usePooling } from "../hooks/usePooling";
 import { useAppContext } from "../contexts/AppContext";
-import { ListItem } from "./ListItem";
+import { ResultsItem } from "./ResultsItem";
 
 type Result = {
   Items: Item[];
@@ -11,7 +11,7 @@ type Result = {
 
 const poolingInterval = 3_000;
 
-export const List: React.FC = () => {
+export const Results: React.FC = () => {
   const { uploadId, setSelectedItem } = useAppContext();
 
   const { fetchItems, fetching, result } = useFetch<Result>(
@@ -42,7 +42,7 @@ export const List: React.FC = () => {
   }, []);
 
   return (
-    <div id="list">
+    <div id="results">
       <div className="status">
         {pooling && (
           <div className="pooling">
@@ -51,10 +51,10 @@ export const List: React.FC = () => {
         )}
         {fetching && <div className="loading">Loading...</div>}
       </div>
-      <h2>List ({result ? result.Items.length : "..."})</h2>
-      <ul className="list">
+      <h2>Results ({result ? result.Items.length : "..."})</h2>
+      <ul className="results">
         {result?.Items.map((item) => (
-          <ListItem key={item.id} item={item} />
+          <ResultsItem key={item.id} item={item} />
         ))}
       </ul>
     </div>

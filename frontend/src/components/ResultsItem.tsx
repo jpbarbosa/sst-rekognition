@@ -5,11 +5,11 @@ import { Item } from "../../../types/Item";
 import { useAppContext } from "../contexts/AppContext";
 import { ReactComponent as Arrow } from "../assets/arrow.svg";
 
-type ListItemProps = {
+type ResultsItemProps = {
   item: Item;
 };
 
-export const ListItem: React.FC<ListItemProps> = ({ item }) => {
+export const ResultsItem: React.FC<ResultsItemProps> = ({ item }) => {
   const { selectedItem, setSelectedItem, setUploadId } = useAppContext();
 
   const getItemClassName = (item: Item) => {

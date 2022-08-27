@@ -1,6 +1,6 @@
 import { Header } from "./components/Header";
 import { Upload } from "./components/Upload";
-import { List } from "./components/List";
+import { Results } from "./components/Results";
 import { AppContextProvider } from "./contexts/AppContext";
 import { Labels } from "./components/Labels";
 
@@ -11,7 +11,7 @@ function App() {
         <Header />
         <div className="content">
           <Upload />
-          <List />
+          <Results />
           <Labels />
         </div>
       </AppContextProvider>

@@ -94,7 +94,7 @@ h2 {
   margin: 0 0 16px 0;
 }
 
-div#list,
+div#results,
 div#upload,
 div#labels {
   position: relative;
@@ -107,7 +107,7 @@ div#upload .file img {
   max-width: 100%;
 }
 
-div#list {
+div#results {
   border-left: 1px solid #333;
   border-right: 1px solid #333;
 }
@@ -118,58 +118,56 @@ ul {
   margin: 0;
 }
 
-ul.list li {
+ul.results li {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 2px;
   padding: 8px 0 8px 8px;
   color: #ccc;
   white-space: nowrap;
-}
-
-ul.list thead tr {
-  background: #111 !important;
-}
-
-ul.list tbody tr {
   cursor: default;
 }
 
-ul.list li:nth-child(odd) {
+ul.results li:first-child {
+  font-size: x-large;
+}
+
+ul.results li:nth-child(odd) {
   background: #333;
 }
 
-ul.list li:nth-child(even) {
+ul.results li:nth-child(even) {
   background: #222;
 }
 
-ul.list li.selected {
+ul.results li.selected {
   color: #fff;
   background: green;
 }
 
-ul.list li svg {
+ul.results li svg {
   width: 32px;
   height: 32px;
 }
 
-ul.list li.selected svg {
+ul.results li.selected svg {
   fill: #fff !important;
 }
 
-ul.list li.selected.error {
+ul.results li.selected.error {
   background: red;
 }
 
-ul.list li.success svg {
+ul.results li.success svg {
   fill: green;
 }
 
-ul.list li.error svg {
+ul.results li.error svg {
   fill: red;
 }
 
-ul.list li div.id {
+ul.results li div.id {
   margin-top: 4px;
   font-size: x-small;
   color: rgba(255, 255, 255, 0.5);
@@ -194,13 +192,21 @@ ul.labels li {
   font-size: small;
 }
 
-ul.labels li div.bar{
+ul.labels li:hover div.bar {
+  background: green;
+}
+
+ul.labels li:hover div.label .info {
+  opacity: 1;
+}
+
+ul.labels li div.bar {
   position: absolute;
   background: #333;
   height: 100%;
 }
 
-ul.labels li div.label{
+ul.labels li div.label {
   position: absolute;
   line-height: 32px;
   vertical-align: middle;
@@ -209,7 +215,7 @@ ul.labels li div.label{
 
 ul.labels li div.label .info {
   padding-left: 4px;
-  color: #999;
+  opacity: 0.5;
 }
 
 input::file-selector-button {
