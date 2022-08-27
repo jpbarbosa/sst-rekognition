@@ -4,6 +4,7 @@ import { useFetch } from "../hooks/useFetch";
 import { usePooling } from "../hooks/usePooling";
 import { useAppContext } from "../contexts/AppContext";
 import { ResultsItem } from "./ResultsItem";
+import { Status } from "./Status";
 
 type Result = {
   Items: Item[];
@@ -43,14 +44,18 @@ export const Results: React.FC = () => {
 
   return (
     <div id="results">
-      <div className="status">
-        {pooling && (
-          <div className="pooling">
-            Pooling every {poolingInterval / 1000}s...
-          </div>
-        )}
-        {fetching && <div className="loading">Loading...</div>}
-      </div>
+      <Status
+        status={[
+          {
+            condition: fetching,
+            message: "Loading...",
+          },
+          {
+            condition: pooling,
+            message: `Next fetch in ${poolingInterval / 1000}s...`,
+          },
+        ]}
+      />
       <h2>Results ({result ? result.Items.length : "..."})</h2>
       <div className="scrollable">
         <ul className="results">

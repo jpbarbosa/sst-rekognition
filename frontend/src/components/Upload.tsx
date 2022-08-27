@@ -3,6 +3,7 @@ import AWS from "aws-sdk";
 import * as uuid from "uuid";
 import { useAppContext } from "../contexts/AppContext";
 import { useUpload } from "../hooks/useUpload";
+import { Status } from "./Status";
 
 const { VITE_API_BUCKET_NAME, VITE_API_IDENTITY_POOL_ID } = import.meta.env;
 
@@ -46,9 +47,14 @@ export const Upload: React.FC = () => {
 
   return (
     <div id="upload">
-      <div className="status">
-        {uploading && <div className="uploading">Uploading...</div>}
-      </div>
+      <Status
+        status={[
+          {
+            condition: uploading,
+            message: "Uploading...",
+          },
+        ]}
+      />
       <h2>Upload</h2>
       <form>
         <input
@@ -58,20 +64,22 @@ export const Upload: React.FC = () => {
           multiple={false}
         />
       </form>
-      {uploadFile && (
-        <div className="file">
-          <div className="box success">{uploadFile.name}</div>
-          <img src={URL.createObjectURL(uploadFile)} />
+      <div className="scrollable">
+        {uploadFile && (
+          <div className="file">
+            <div className="box success">{uploadFile.name}</div>
+            <img src={URL.createObjectURL(uploadFile)} />
+          </div>
+        )}
+        {uploadError && (
+          <div className="box error">
+            <pre>{JSON.stringify(uploadError, null, 4)}</pre>
+          </div>
+        )}
+        <div className="box info">
+          Only the last uploaded image will be displayed. Files are
+          automatically removed from S3 after processing.
         </div>
-      )}
-      {uploadError && (
-        <div className="box error">
-          <pre>{JSON.stringify(uploadError, null, 4)}</pre>
-        </div>
-      )}
-      <div className="box info">
-        Only the last uploaded image will be displayed. Files are automatically
-        removed from S3 after processing.
       </div>
     </div>
   );

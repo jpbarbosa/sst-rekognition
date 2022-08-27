@@ -59,21 +59,25 @@ header p {
 }
 
 .status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   top: 0;
   right: 0;
+  background: #000;
+  opacity: 0.8;
+  height: 100%;
+  width: 100%;
 }
 
-.loading,
-.pooling,
-.uploading {
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.2);
+.status .message {
+  font-size: x-large;
   color: #fff;
 }
 
 .box {
-  margin-top: 16px;
+  margin-bottom: 16px;
   padding: 8px;
   border: 2px solid #111;
 }
@@ -110,8 +114,12 @@ div#labels {
   flex: 1;
 }
 
+div#upload form {
+  margin-bottom: 16px;
+}
+
 div#upload .file img {
-  margin-top: 16px;
+  margin-bottom: 16px;
   max-width: 100%;
 }
 
