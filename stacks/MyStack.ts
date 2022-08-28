@@ -1,120 +1,25 @@
+import { StackContext } from "@serverless-stack/resources";
 import {
-  StackContext,
-  Api,
-  Bucket,
-  EventBus,
-  Queue,
-  Table,
-  ViteStaticSite,
-  Auth,
-} from "@serverless-stack/resources";
-import * as events from "aws-cdk-lib/aws-events";
-import { PolicyStatement } from "aws-cdk-lib/aws-iam";
+  createBucket,
+  createTable,
+  createQueue,
+  createBus,
+  createApi,
+  createAuth,
+  createSite,
+} from "./resources";
 
 export function MyStack({ stack }: StackContext) {
-  const bucket = new Bucket(stack, "bucket", {
-    cors: true,
-    cdk: {
-      bucket: {
-        eventBridgeEnabled: true,
-      },
-    },
-  });
-
-  const table = new Table(stack, "table", {
-    fields: {
-      id: "string",
-    },
-    primaryIndex: { partitionKey: "id" },
-  });
-
-  const queuePolicy = new PolicyStatement({
-    actions: ["rekognition:*"],
-    resources: ["*"],
-  });
-
-  const queue = new Queue(stack, "queue", {
-    consumer: {
-      function: {
-        handler: "functions/process.handler",
-        initialPolicy: [queuePolicy],
-        environment: {
-          table: table.tableName,
-        },
-      },
-    },
-  });
-
-  queue.attachPermissions([table, bucket]);
-
-  const bus = new EventBus(stack, "bus", {
-    cdk: {
-      eventBus: events.EventBus.fromEventBusName(
-        stack,
-        "ImportedBus",
-        "default"
-      ),
-    },
-    rules: {
-      rule1: {
-        pattern: {
-          source: ["aws.s3"],
-          detailType: ["Object Created"],
-          detail: {
-            bucket: {
-              name: [bucket.bucketName],
-            },
-          },
-        },
-        targets: {
-          process: queue,
-        },
-      },
-    },
-  });
-
-  const api = new Api(stack, "api", {
-    defaults: {
-      function: {
-        environment: {
-          table: table.tableName,
-        },
-      },
-    },
-    routes: {
-      "GET /": "functions/results.handler",
-    },
-  });
-
-  api.attachPermissions([table]);
-
-  const auth = new Auth(stack, "auth", {
-    identityPoolFederation: {
-      cdk: {
-        cfnIdentityPool: {
-          identityPoolName: "identityPool",
-          allowUnauthenticatedIdentities: true,
-        },
-      },
-    },
-  });
-
-  const identityPoolId = String(auth.cdk.cfnIdentityPool?.ref);
-
-  auth.attachPermissionsForUnauthUsers(auth, [bucket]);
-
-  const site = new ViteStaticSite(stack, "site", {
-    path: "frontend",
-    environment: {
-      VITE_API_URL: api.url,
-      VITE_API_BUCKET_NAME: bucket.bucketName,
-      VITE_API_IDENTITY_POOL_ID: identityPoolId,
-    },
-  });
+  const bucket = createBucket(stack);
+  const table = createTable(stack);
+  const queue = createQueue(stack, { bucket, table });
+  const bus = createBus(stack, { bucket, queue });
+  const api = createApi(stack, { table });
+  const auth = createAuth(stack, { bucket });
+  const site = createSite(stack, { api, bucket, auth });
 
   stack.addOutputs({
     ApiEndpoint: api.url,
     SiteUrl: site.url,
-    identityPoolId,
   });
 }
