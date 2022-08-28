@@ -1,6 +1,6 @@
 /// <reference types="vite-plugin-svgr/client" />
 
-import { ReactComponent as Rekognition } from "../../public/rekognition.svg";
+import { ReactComponent as Rekognition } from "../assets/rekognition.svg";
 
 export const Header: React.FC = () => {
   return (
