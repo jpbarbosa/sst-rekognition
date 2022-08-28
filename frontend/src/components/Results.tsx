@@ -15,7 +15,7 @@ const poolingInterval = 3_000;
 export const Results: React.FC = () => {
   const { uploadId, setSelectedItem } = useAppContext();
 
-  const { fetchItems, fetching, result } = useFetch<Result>(
+  const { fetchItems, fetching, result, error } = useFetch<Result>(
     import.meta.env.VITE_API_URL
   );
 
@@ -56,14 +56,18 @@ export const Results: React.FC = () => {
           },
         ]}
       />
-      <h2>Results ({result ? result.Items.length : "..."})</h2>
-      <div className="scrollable">
-        <ul className="results">
-          {result?.Items.map((item) => (
-            <ResultsItem key={item.id} item={item} />
-          ))}
-        </ul>
-      </div>
+      <h2>Results ({result?.Items ? result.Items.length : "..."})</h2>
+      {error ? (
+        <div className="box error">{error.message}</div>
+      ) : (
+        <div className="scrollable">
+          <ul className="results">
+            {result?.Items?.map((item) => (
+              <ResultsItem key={item.id} item={item} />
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

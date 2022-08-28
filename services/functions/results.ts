@@ -8,17 +8,24 @@ export const handler = async (event: APIGatewayProxyHandlerV2) => {
     TableName: String(process.env.table),
   };
 
-  const result = await dynamoDb.scan(params).promise();
+  try {
+    const result = await dynamoDb.scan(params).promise();
 
-  const sortedResult = {
-    ...result,
-    Items: result.Items?.sort((a, b) => {
-      return b.createdAt - a.createdAt;
-    }),
-  };
+    const sortedResult = {
+      ...result,
+      Items: result.Items?.sort((a, b) => {
+        return b.createdAt - a.createdAt;
+      }),
+    };
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify(sortedResult),
-  };
+    return {
+      statusCode: 200,
+      body: JSON.stringify(sortedResult),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify(error),
+    };
+  }
 };
