@@ -11,7 +11,7 @@
 - Rekognition
 - Simple Queue Service (SQS)
 - Simple Storage Service (S3)
-- Vite Static Site
+- React Frontend
 
 ### Diagram
 
