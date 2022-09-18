@@ -2,6 +2,10 @@
 
 ### An event-driven app to label images on top of AWS
 
+### Step-by-Step Tutorial (build your own app)
+
+https://github.com/jpbarbosa/sst-rekognition/wiki
+
 ### Including
 
 - API Gateway
