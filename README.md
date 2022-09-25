@@ -29,6 +29,9 @@ Image labeled in the above example by Kendisan Seruyan: https://1x.com/photo/563
 
 ### References
 
-- https://aws.amazon.com/blogs/aws/new-use-amazon-s3-event-notifications-with-amazon-eventbridge/
-- https://www.youtube.com/watch?v=k-jEuNb_KBM
-- https://medium.com/@KerrySheldon/s3-exercise-2-3-add-content-to-a-bucket-using-a-browser-side-script-with-aws-sdk-and-cognito-93beb4fc1151
+- [SST](https://sst.dev) (the awesome tool that made this app possible)
+- [AWS Docs - Detecting labels in an image](https://docs.aws.amazon.com/rekognition/latest/dg/labels-detect-labels-image.html)
+- [AWS Blog - Use Amazon S3 Event Notifications with Amazon EventBridge](https://aws.amazon.com/blogs/aws/new-use-amazon-s3-event-notifications-with-amazon-eventbridge/)
+- [YouTube - What is Event Driven Architecture?](https://youtu.be/DQ5Cbt8DQbM)
+- [YouTube - Amazon S3 Event Notifications with Amazon EventBridge](https://youtu.be/k-jEuNb_KBM)
+- [Medium - Add Objects to a Bucket Using a Browser-Side Script with AWS SDK and Cognito](https://medium.com/@KerrySheldon/s3-exercise-2-3-add-content-to-a-bucket-using-a-browser-side-script-with-aws-sdk-and-cognito-93beb4fc1151)
