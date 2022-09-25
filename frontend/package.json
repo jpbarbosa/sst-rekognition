@@ -16,11 +16,11 @@
     "vite-plugin-svgr": "^2.2.1"
   },
   "devDependencies": {
-    "@serverless-stack/static-site-env": "^1.6.7",
-    "@types/react": "^18.0.15",
+    "@serverless-stack/static-site-env": "^1.14.4",
+    "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "@vitejs/plugin-react": "^2.0.0",
+    "@vitejs/plugin-react": "^2.1.0",
     "typescript": "^4.6.4",
-    "vite": "^3.0.0"
+    "vite": "^3.1.0"
   }
 }

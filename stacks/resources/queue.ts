@@ -5,7 +5,7 @@ type CreateQueueOptions = { bucket: Bucket; table: Table };
 
 type CreateQueue = (stack: Stack, options: CreateQueueOptions) => Queue;
 
-export const createQueue: CreateQueue = (stack: Stack, { bucket, table }) => {
+export const createQueue: CreateQueue = (stack, { bucket, table }) => {
   const queuePolicy = new PolicyStatement({
     actions: ["rekognition:*"],
     resources: ["*"],

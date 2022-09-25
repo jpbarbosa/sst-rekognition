@@ -5,7 +5,7 @@ type CreateBusOptions = { bucket: Bucket; queue: Queue };
 
 type CreateBus = (stack: Stack, options: CreateBusOptions) => EventBus;
 
-export const createBus: CreateBus = (stack: Stack, { bucket, queue }) =>
+export const createBus: CreateBus = (stack, { bucket, queue }) =>
   new EventBus(stack, "bus", {
     cdk: {
       eventBus: events.EventBus.fromEventBusName(

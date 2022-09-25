@@ -1,11 +1,11 @@
-import { Auth, Bucket, Stack } from "@serverless-stack/resources";
+import { Cognito, Bucket, Stack } from "@serverless-stack/resources";
 
 type CreateAuthOptions = { bucket: Bucket };
 
-type CreateAuth = (stack: Stack, options: CreateAuthOptions) => Auth;
+type CreateAuth = (stack: Stack, options: CreateAuthOptions) => Cognito;
 
 export const createAuth: CreateAuth = (stack, { bucket }) => {
-  const auth = new Auth(stack, "auth", {
+  const auth = new Cognito(stack, "auth", {
     identityPoolFederation: {
       cdk: {
         cfnIdentityPool: {
