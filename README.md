@@ -1,6 +1,6 @@
 # SST Rekognition
 
-### An event-driven app to label images on top of AWS
+### An event-driven app to label images on top of AWS using SST (Serverless Stack), TypeScript, and React.
 
 ### Step-by-Step Tutorial (build your own app)
 
